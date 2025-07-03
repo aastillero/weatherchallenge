@@ -106,7 +106,7 @@ This is the simplest way to run the application, as it doesn't require a local J
 
 3.  **Run the application**:
     ```bash
-    java -jar target/weather-challenge-0.0.1-SNAPSHOT.jar
+    mvn spring-boot:run
     ```
     The service will be available at `http://localhost:8080`.
 
