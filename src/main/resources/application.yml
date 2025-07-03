@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+# Application specific configuration
+app:
+  weather:
+    city: "Melbourne" # Hard-coded city as per spec
+    cache:
+      ttl-seconds: 3
+      name: "weather-cache"
+    providers:
+      weatherstack:
+        # NOTE: Use environment variables for sensitive keys in production
+        # Example: api-key: ${WEATHERSTACK_API_KEY}
+        api-key: "a32b6e9c2990579ed49552b90070e915"
+        url: "http://api.weatherstack.com/current"
+      openweathermap:
+        api-key: "ce8ab766adf183fbbe5d9e16916e59bb"
+        url: "http://api.openweathermap.org/data/2.5/weather"
+
+# Spring Cache Configuration
+spring:
+  cache:
+    cache-names:
+      - ${app.weather.cache.name}
+    caffeine:
+      spec: "expireAfterWrite=${app.weather.cache.ttl-seconds}s"
+
+# Logging levels for clarity
+logging:
+  level:
+    com.zai.weatherchallenge: DEBUG
+    org.springframework.web: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+app:
+  weather:
+    city: "Melbourne" # Hard-coded city as per spec
+    cache:
+      ttl-seconds: 3
+      name: "weather-cache"
+    providers:
+      weatherstack:
+        # NOTE: Use environment variables for sensitive keys in production
+        # Example: api-key: ${WEATHERSTACK_API_KEY}
+        api-key: "a32b6e9c2990579ed49552b90070e915"
+        url: "http://api.weatherstack.com/current"
+      openweathermap:
+        api-key: "ce8ab766adf183fbbe5d9e16916e59bb"
+        url: "http://api.openweathermap.org/data/2.5/weather"
