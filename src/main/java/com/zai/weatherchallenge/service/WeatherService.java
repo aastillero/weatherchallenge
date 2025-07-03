@@ -30,13 +30,14 @@ public class WeatherService {
         this.cacheName = cacheName;
     }
 
-    @Cacheable(value = "${app.weather.cache.name}", key = "#root.target.city")
+    //@Cacheable(value = "${app.weather.cache.name}", key = "#root.target.city")
+    @Cacheable(value = "weather-cache", key = "#root.target.city")
     public Mono<WeatherResponse> getWeatherForCity() {
         log.info("Cache miss. Fetching fresh weather data for {}.", city);
         return primaryClient.fetchWeather(city)
             .doOnSuccess(response -> log.info("Successfully fetched weather from primary provider: {}", primaryClient.getProviderName()))
             .onErrorResume(e -> {
-                log.warn("Primary provider ({}) failed: {}. Attempting failover.", primaryClient.getProviderName(), e.getMessage());
+                log.warn("Primary provider ({}) failed: {}. Attempting failover.", primaryClient.getProviderName(), e.toString());
                 return failoverClient.fetchWeather(city)
                     .doOnSuccess(response -> log.info("Successfully fetched weather from failover provider: {}", failoverClient.getProviderName()))
                     .onErrorMap(failoverException -> {

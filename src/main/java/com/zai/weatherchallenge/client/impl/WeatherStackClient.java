@@ -3,29 +3,31 @@ package com.zai.weatherchallenge.client.impl;
 import com.zai.weatherchallenge.client.WeatherProviderClient;
 import com.zai.weatherchallenge.dto.WeatherResponse;
 import com.zai.weatherchallenge.dto.external.WeatherStackResponse;
+import com.zai.weatherchallenge.config.WeatherStackProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Component
 @Qualifier("primary")
+@EnableConfigurationProperties(WeatherStackProperties.class)
 public class WeatherStackClient implements WeatherProviderClient {
 
     private final WebClient webClient;
-    private final String apiKey;
+    private final WeatherStackProperties properties;
 
-    public WeatherStackClient(WebClient.Builder webClientBuilder, @Value("${app.providers.weatherstack.url}") String baseUrl, @Value("${app.providers.weatherstack.api-key}") String apiKey) {
-        this.webClient = webClientBuilder.baseUrl(baseUrl).build();
-        this.apiKey = apiKey;
+    public WeatherStackClient(WebClient.Builder webClientBuilder, WeatherStackProperties properties) {
+        this.webClient = webClientBuilder.baseUrl(properties.url()).build();
+        this.properties = properties;
     }
 
     @Override
     public Mono<WeatherResponse> fetchWeather(String city) {
         return this.webClient.get()
             .uri(uriBuilder -> uriBuilder
-                .queryParam("access_key", apiKey)
+                .queryParam("access_key", properties.apiKey())
                 .queryParam("query", city)
                 .build())
             .retrieve()

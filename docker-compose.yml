@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  weather-app:
+    image: weather-challenge:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - WEATHERSTACK_API_KEY=a32b6e9c2990579ed49552b90070e915
+      - OPENWEATHERMAP_APPID=ce8ab766adf183fbbe5d9e16916e59bb
+    restart: unless-stopped
