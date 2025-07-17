@@ -42,7 +42,7 @@ public class OpenWeatherMapClient implements WeatherProviderClient {
         return "OpenWeatherMap";
     }
 
-    private WeatherResponse toUnifiedResponse(OpenWeatherMapResponse response) {
+    public WeatherResponse toUnifiedResponse(OpenWeatherMapResponse response) {
         return WeatherResponse.builder()
             .temperatureDegrees(convertKelvinToCelsius(response.getMain().getTemp()))
             .windSpeed(convertMsToKph(response.getWind().getSpeed()))

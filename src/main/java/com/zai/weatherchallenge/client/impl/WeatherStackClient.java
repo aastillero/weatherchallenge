@@ -40,7 +40,7 @@ public class WeatherStackClient implements WeatherProviderClient {
         return "WeatherStack";
     }
 
-    private WeatherResponse toUnifiedResponse(WeatherStackResponse response) {
+    public WeatherResponse toUnifiedResponse(WeatherStackResponse response) {
         return WeatherResponse.builder()
             .temperatureDegrees(response.getCurrent().getTemperature())
             .windSpeed(response.getCurrent().getWind_speed())
